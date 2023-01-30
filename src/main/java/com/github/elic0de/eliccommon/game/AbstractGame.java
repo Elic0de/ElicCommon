@@ -3,7 +3,9 @@ package com.github.elic0de.eliccommon.game;
 import com.github.elic0de.eliccommon.game.phase.Phase;
 import com.github.elic0de.eliccommon.plugin.AbstractPlugin;
 import com.github.elic0de.eliccommon.user.OnlineUser;
+import de.themoep.minedown.MineDown;
 import lombok.Getter;
+import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +35,18 @@ public abstract class AbstractGame {
     public void leave(@NotNull OnlineUser player) {
         players.remove(player);
         getPhase().leave(player);
+    }
+
+    public void broadcast(MineDown message) {
+        players.forEach(player -> player.sendMessage(message));
+    }
+
+    public void title(String title, String subTitle) {
+        players.forEach(player -> player.sendTitle(title, subTitle));
+    }
+
+    public void sound(Sound sound) {
+        players.forEach(player -> player.playSound(sound));
     }
 
     public void updatePhase() {
