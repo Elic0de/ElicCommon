@@ -22,10 +22,12 @@ public abstract class AbstractGame {
     private int currentPhase = 0;
     private BukkitTask startTask;
     private BukkitTask endTask;
-    private final AtomicLong currentStartTicks = new AtomicLong();
-    private final AtomicLong currentEndTicks = new AtomicLong();
     @Getter
-    private final Set<OnlineUser> players = new HashSet<>();
+    protected final AtomicLong currentStartTicks = new AtomicLong();
+    @Getter
+    protected final AtomicLong currentEndTicks = new AtomicLong();
+    @Getter
+    protected final Set<OnlineUser> players = new HashSet<>();
 
     public void join(@NotNull OnlineUser player) {
         players.add(player);
@@ -47,6 +49,12 @@ public abstract class AbstractGame {
 
     public void sound(Sound sound) {
         players.forEach(player -> player.playSound(sound));
+    }
+
+    public void reset() {
+        currentStartTicks.set(0);
+        currentEndTicks.set(0);
+        players.clear();
     }
 
     public void updatePhase() {
