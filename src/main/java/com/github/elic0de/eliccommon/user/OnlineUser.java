@@ -3,7 +3,6 @@ package com.github.elic0de.eliccommon.user;
 import de.themoep.minedown.MineDown;
 import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

@@ -12,9 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public abstract class AbstractGame {
 
@@ -26,7 +28,6 @@ public abstract class AbstractGame {
     protected final AtomicLong currentStartTicks = new AtomicLong();
     @Getter
     protected final AtomicLong currentEndTicks = new AtomicLong();
-    @Getter
     protected final Set<OnlineUser> players = new HashSet<>();
 
     public void join(@NotNull OnlineUser player) {
@@ -105,6 +106,10 @@ public abstract class AbstractGame {
     public Phase getPhase() {
         queryCurrentPhase();
         return getPhases()[currentPhase];
+    }
+
+    public <T extends OnlineUser> List<T> getPlayers(@NotNull Class<@NotNull T> type) {
+        return players.stream().map(type::cast).collect(Collectors.toList());
     }
 
     @NotNull
