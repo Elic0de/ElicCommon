@@ -108,8 +108,16 @@ public abstract class AbstractGame {
         return getPhases()[currentPhase];
     }
 
+    public void setCurrentPhase(int currentPhase) {
+        this.currentPhase = currentPhase;
+    }
+
     public <T extends OnlineUser> List<T> getPlayers(@NotNull Class<@NotNull T> type) {
         return players.stream().map(type::cast).collect(Collectors.toList());
+    }
+
+    public Set<OnlineUser> getPlayers() {
+        return players;
     }
 
     @NotNull
