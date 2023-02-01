@@ -25,10 +25,10 @@ public abstract class AbstractGame {
     private BukkitTask startTask;
     private BukkitTask endTask;
     @Getter
-    protected final AtomicLong currentStartTicks = new AtomicLong();
+    public final AtomicLong currentStartTicks = new AtomicLong();
     @Getter
-    protected final AtomicLong currentEndTicks = new AtomicLong();
-    protected final Set<OnlineUser> players = new HashSet<>();
+    public final AtomicLong currentEndTicks = new AtomicLong();
+    private final Set<OnlineUser> players = new HashSet<>();
 
     public void join(@NotNull OnlineUser player) {
         players.add(player);
