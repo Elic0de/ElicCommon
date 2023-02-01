@@ -5,7 +5,9 @@ import com.google.common.base.Preconditions;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -144,7 +146,8 @@ public final class ItemBuilder {
      */
     @NotNull
     public ItemBuilder name(@NotNull String name) {
-        this.meta.setDisplayName(name);
+        final String coloredName = ChatColor.translateAlternateColorCodes('&', name);
+        this.meta.setDisplayName(coloredName);
         return this;
     }
 
@@ -161,7 +164,7 @@ public final class ItemBuilder {
     @NotNull
     public ItemBuilder lore(@Nullable String... lore) {
         if (lore == null || lore.length > 0) {
-            this.meta.setLore(Arrays.asList(lore));
+            this.meta.setLore(Arrays.stream(lore).map(s -> ChatColor.translateAlternateColorCodes('&', s)).collect(Collectors.toList()));
         }
 
         return this;
@@ -179,7 +182,7 @@ public final class ItemBuilder {
      */
     @NotNull
     public ItemBuilder lore(@NotNull List<String> lore) {
-        this.meta.setLore(lore);
+        this.meta.setLore(lore.stream().map(s -> ChatColor.translateAlternateColorCodes('&', s)).collect(Collectors.toList()));
         return this;
     }
 
