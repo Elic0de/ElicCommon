@@ -1,11 +1,11 @@
 package com.github.elic0de.eliccommon.game;
 
 import com.github.elic0de.eliccommon.game.phase.Phase;
-import com.github.elic0de.eliccommon.plugin.AbstractPlugin;
 import com.github.elic0de.eliccommon.user.OnlineUser;
 import de.themoep.minedown.MineDown;
 import lombok.Getter;
 import org.bukkit.Sound;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractGame {
 
+    private final Plugin plugin;
+
     private final @Nullable Supplier<Integer> queryPhase = null;
     private int currentPhase = 0;
     private BukkitTask startTask;
@@ -29,6 +31,10 @@ public abstract class AbstractGame {
     @Getter
     public final AtomicLong currentEndTicks = new AtomicLong();
     private final Set<OnlineUser> players = new HashSet<>();
+
+    protected AbstractGame(Plugin plugin) {
+        this.plugin = plugin;
+    }
 
     public void join(@NotNull OnlineUser player) {
         players.add(player);
@@ -57,7 +63,6 @@ public abstract class AbstractGame {
         currentEndTicks.set(0);
         players.clear();
     }
-
     public void updatePhase() {
         getPhase().update();
     }
@@ -83,7 +88,7 @@ public abstract class AbstractGame {
                     cancel();
                 }
             }
-        }.runTaskTimer(AbstractPlugin.getInstance(), 0, PERIOD);
+        }.runTaskTimer(plugin, 0, PERIOD);
 
         endTask = new BukkitRunnable() {
             @Override
@@ -93,7 +98,7 @@ public abstract class AbstractGame {
                     cancel();
                 }
             }
-        }.runTaskTimer(AbstractPlugin.getInstance(), 0, PERIOD);
+        }.runTaskTimer(plugin, 0, PERIOD);
         currentPhase = getPhases().length > currentPhase + 1 ? currentPhase + 1 : 0;
     }
 

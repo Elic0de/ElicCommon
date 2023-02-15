@@ -15,7 +15,6 @@ public abstract class Phase {
         this.endDelay = endDelay;
     }
 
-
     public abstract void start();
 
     public abstract void update();

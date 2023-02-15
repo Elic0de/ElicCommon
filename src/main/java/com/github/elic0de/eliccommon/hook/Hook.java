@@ -1,14 +1,14 @@
 package com.github.elic0de.eliccommon.hook;
 
-import com.github.elic0de.eliccommon.plugin.AbstractPlugin;
+import org.bukkit.plugin.Plugin;
 
 public abstract class Hook {
 
-    protected final AbstractPlugin plugin;
+    protected final Plugin plugin;
     private final String name;
     private boolean enabled = false;
 
-    protected Hook(AbstractPlugin plugin, String name) {
+    protected Hook(Plugin plugin, String name) {
         this.plugin = plugin;
         this.name = name;
     }
