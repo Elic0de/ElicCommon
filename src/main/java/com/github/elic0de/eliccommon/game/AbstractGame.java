@@ -6,6 +6,7 @@ import de.themoep.minedown.MineDown;
 import lombok.Getter;
 import org.bukkit.Sound;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractGame {
 
-    private final Plugin plugin;
+    private final JavaPlugin plugin;
 
     private final @Nullable Supplier<Integer> queryPhase = null;
     private int currentPhase = 0;
@@ -32,7 +33,7 @@ public abstract class AbstractGame {
     public final AtomicLong currentEndTicks = new AtomicLong();
     private final Set<OnlineUser> players = new HashSet<>();
 
-    protected AbstractGame(Plugin plugin) {
+    protected AbstractGame(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 
