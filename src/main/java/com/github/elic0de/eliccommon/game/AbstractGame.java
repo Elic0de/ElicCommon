@@ -27,6 +27,7 @@ public abstract class AbstractGame {
     private int currentPhase = 0;
     private BukkitTask startTask;
     private BukkitTask endTask;
+    private BukkitTask updateTask;
     @Getter
     public final AtomicLong currentStartTicks = new AtomicLong();
     @Getter
@@ -64,8 +65,15 @@ public abstract class AbstractGame {
         currentEndTicks.set(0);
         players.clear();
     }
-    public void updatePhase() {
-        getPhase().update();
+
+    protected void updatePhaseTask(long period) {
+        if (updateTask != null) updateTask.cancel();
+        updateTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                getPhase().update();
+            }
+        }.runTaskTimer(plugin, 0, period);
     }
 
     public void nextPhase() {
