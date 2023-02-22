@@ -10,6 +10,11 @@ public abstract class Phase {
     @Getter
     private final long endDelay;
 
+    public Phase() {
+        this.startDelay = -0L;
+        this.endDelay = -0L;
+    }
+
     public Phase(long startDelay, long endDelay) {
         this.startDelay = startDelay;
         this.endDelay = endDelay;
