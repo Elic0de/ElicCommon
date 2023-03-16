@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,6 +75,15 @@ public abstract class AbstractGame {
                 getPhase().update();
             }
         }.runTaskTimer(plugin, 0, period);
+    }
+
+    public <T extends Phase> void setPhase(Class<T> phase) {
+        queryCurrentPhase();
+        int index = 0;
+        for (Phase phase1 : getPhases()) {
+            if (phase.isAssignableFrom(phase1.getClass())) currentPhase = index;
+            index++;
+        }
     }
 
     public void nextPhase() {
