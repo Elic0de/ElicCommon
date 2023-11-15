@@ -3,6 +3,7 @@ package com.github.elic0de.eliccommon.game;
 
 import com.github.elic0de.eliccommon.bossbar.GameBossBar;
 import com.github.elic0de.eliccommon.player.OnlinePlayer;
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -54,8 +55,8 @@ public abstract class Game {
         getPlayers().forEach(player -> player.sendMessage(Component.text(coloredMessage)));
     }
 
-    public final void broadcast() {
-        getPlayers().forEach(player -> player.sendMessage(message));
+    public final void broadcast(final Component component) {
+        getPlayers().forEach(player -> player.sendMessage(component));
     }
 
     public final void sound(Sound sound) {

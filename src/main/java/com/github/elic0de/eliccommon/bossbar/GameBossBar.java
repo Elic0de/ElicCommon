@@ -1,12 +1,12 @@
 package com.github.elic0de.eliccommon.bossbar;
 
+import com.github.elic0de.eliccommon.player.OnlinePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.jetbrains.annotations.NotNull;
-import pakira.player.OnlinePlayer;
 
 public final class GameBossBar {
 

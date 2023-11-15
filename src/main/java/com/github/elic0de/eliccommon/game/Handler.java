@@ -1,7 +1,6 @@
 package com.github.elic0de.eliccommon.game;
 
 import com.github.elic0de.eliccommon.player.OnlinePlayer;
-import gg.jps.sumo.Sumo;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,7 +8,6 @@ import org.bukkit.Sound;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import pakira.player.OnlinePlayer;
 
 import java.util.Collection;
 import java.util.List;

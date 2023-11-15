@@ -12,6 +12,9 @@ public class DatabaseMap<T> extends LinkedHashMap<String, Object> {
 
     private final String tableName;
 
+    private final LinkedHashMap<String, List<String>> attributes = new LinkedHashMap<>();
+
+
     protected DatabaseMap(@NotNull T object) throws IllegalArgumentException {
         super();
 
@@ -37,6 +40,8 @@ public class DatabaseMap<T> extends LinkedHashMap<String, Object> {
 
         final Field[] fields = object.getClass().getDeclaredFields();
         for (final Field field : fields) {
+            final List<String> list = new ArrayList<>();
+
             // Ensure the field is accessible
             field.setAccessible(true);
 
@@ -46,9 +51,14 @@ public class DatabaseMap<T> extends LinkedHashMap<String, Object> {
             }
 
             final String key = field.getName().toLowerCase(Locale.ROOT);
-
             if (field.isAnnotationPresent(AnnoPrimaryKey.class)) {
+                list.add("PRIMARY KEY");
             }
+
+            if (field.isAnnotationPresent(AnnoNotNull.class)) {
+                list.add("NOT NULL");
+            }
+            attributes.put(key, list);
 
             try {
                 final Optional<Object> value = readFieldValue(field, object);
@@ -93,5 +103,9 @@ public class DatabaseMap<T> extends LinkedHashMap<String, Object> {
 
     public String getTableName() {
         return tableName;
+    }
+
+    public String getAttribute(String key) {
+        return String.join(" ", attributes.getOrDefault(key, List.of()));
     }
 }

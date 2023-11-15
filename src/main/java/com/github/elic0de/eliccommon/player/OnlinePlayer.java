@@ -1,5 +1,6 @@
 package com.github.elic0de.eliccommon.player;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -20,13 +21,13 @@ public abstract class OnlinePlayer {
         getPlayer().sendMessage(message);
     }
 
-    /*public final void sendMessage(Component message) {
+    public final void sendMessage(Component message) {
        getPlayer().sendMessage(message);
     }
 
     public final void sendActionBar(String message) {
         getPlayer().sendActionBar(Component.text(ChatColor.translateAlternateColorCodes('&', message)));
-    }*/
+    }
 
     public final void playSound(Sound sound) {
         getPlayer().playSound(getPlayer().getLocation(), sound, 1F, 1F);
