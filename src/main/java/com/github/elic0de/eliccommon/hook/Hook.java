@@ -1,14 +1,15 @@
 package com.github.elic0de.eliccommon.hook;
 
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class Hook {
 
-    protected final Plugin plugin;
+    protected final JavaPlugin plugin;
     private final String name;
     private boolean enabled = false;
 
-    protected Hook(Plugin plugin, String name) {
+    protected Hook(@NotNull JavaPlugin plugin, @NotNull String name) {
         this.plugin = plugin;
         this.name = name;
     }
@@ -20,10 +21,11 @@ public abstract class Hook {
         this.enabled = true;
     }
 
-    public boolean isNotEnabled() {
+    public boolean isDisabled() {
         return !enabled;
     }
 
+    @NotNull
     public String getName() {
         return name;
     }

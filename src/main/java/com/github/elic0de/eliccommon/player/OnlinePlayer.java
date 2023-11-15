@@ -1,31 +1,37 @@
-package com.github.elic0de.eliccommon.user;
+package com.github.elic0de.eliccommon.player;
 
-import de.themoep.minedown.MineDown;
-import net.md_5.bungee.api.ChatMessageType;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public abstract class OnlineUser extends User {
+public abstract class OnlinePlayer {
 
-    protected OnlineUser(@NotNull UUID uuid, @NotNull String username) {
-        super(uuid, username);
+    private final UUID uuid;
+    private final String username;
+
+    protected OnlinePlayer(UUID uuid, String username) {
+        this.uuid = uuid;
+        this.username = username;
     }
 
-    public final void sendMessage(@NotNull MineDown mineDown) {
-        getPlayer().spigot().sendMessage(mineDown.toComponent());
+    public final void sendMessage(String message) {
+        getPlayer().sendMessage(message);
     }
 
-    public final void sendActionBar(@NotNull MineDown mineDown) {
-        getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, mineDown.toComponent());
+    /*public final void sendMessage(Component message) {
+       getPlayer().sendMessage(message);
     }
+
+    public final void sendActionBar(String message) {
+        getPlayer().sendActionBar(Component.text(ChatColor.translateAlternateColorCodes('&', message)));
+    }*/
 
     public final void playSound(Sound sound) {
         getPlayer().playSound(getPlayer().getLocation(), sound, 1F, 1F);
     }
+
     public final void playSound(Sound sound, float volume, float pitch) {
         getPlayer().playSound(getPlayer().getLocation(), sound, volume, pitch);
     }
@@ -40,8 +46,14 @@ public abstract class OnlineUser extends User {
         getPlayer().sendTitle(coloredTitle, coloredSubTitle, fadeIn, stay, fadeOut);
     }
 
+    public UUID getUniqueId() {
+        return uuid;
+    }
 
+    public String getUsername() {
+        return username;
+    }
 
-    @NotNull
     public abstract Player getPlayer();
+
 }
