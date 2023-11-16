@@ -1,4 +1,4 @@
-package pakira.util;
+package com.github.elic0de.eliccommon.util;
 
 import com.google.common.base.Preconditions;
 import net.kyori.adventure.text.Component;
