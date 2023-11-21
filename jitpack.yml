@@ -1,3 +1,2 @@
-before_install:
-   - sdk install java 15-open
-   - sdk use java 15-open
+jdk:
+  - openjdk17
