@@ -1,7 +1,7 @@
 package com.github.elic0de.eliccommon.hook;
 
+import com.github.elic0de.eliccommon.player.OnlinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
-import pakira.player.OnlinePlayer;
 
 import java.math.BigDecimal;
 
