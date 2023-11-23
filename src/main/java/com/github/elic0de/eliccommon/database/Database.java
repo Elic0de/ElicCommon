@@ -46,7 +46,7 @@ public class Database {
         }
     }
 
-    public TypeAdapter<String> STRING = new TypeAdapter<>() {
+    public TypeAdapter<String> STRING = new TypeAdapter<String>() {
 
         @Override
         public String read(ResultSet resultSet, String columnLabel) throws SQLException {
@@ -59,7 +59,7 @@ public class Database {
         }
     };
 
-    public TypeAdapter<Integer> INT = new TypeAdapter<>() {
+    public TypeAdapter<Integer> INT = new TypeAdapter<Integer>() {
 
         @Override
         public Integer read(ResultSet resultSet, String columnLabel) throws SQLException {
@@ -72,7 +72,7 @@ public class Database {
         }
     };
 
-    public TypeAdapter<Long> LONG = new TypeAdapter<>() {
+    public TypeAdapter<Long> LONG = new TypeAdapter<Long>() {
 
         @Override
         public Long read(ResultSet resultSet, String columnLabel) throws SQLException {
@@ -85,7 +85,7 @@ public class Database {
         }
     };
 
-    public TypeAdapter<java.util.UUID> UUID = new TypeAdapter<>() {
+    public TypeAdapter<java.util.UUID> UUID = new TypeAdapter<UUID>() {
 
         @Override
         public UUID read(ResultSet resultSet, String columnLabel) throws SQLException {
@@ -98,15 +98,15 @@ public class Database {
         }
     };
 
-    private final Map<Class<?>, TypeAdapter<?>> typeAdapters = Map.of(
-            String.class, STRING,
-            UUID.class, UUID,
-            Integer.class, INT,
-            Long.class, LONG
-    );
+    private final Map<Class<?>, TypeAdapter<?>> typeAdapters = new HashMap<>();
 
     public Database(JavaPlugin plugin, String fileName) {
         this.databaseFile = new File(plugin.getDataFolder(), fileName);
+
+        typeAdapters.put(String.class, STRING);
+        typeAdapters.put(UUID.class, UUID);
+        typeAdapters.put(Integer.class, INT);
+        typeAdapters.put(Long.class, LONG);
     }
 
     public <T> boolean isCreated(T object) {
@@ -118,10 +118,7 @@ public class Database {
         }
         final String tableName = object.getClass().getAnnotation(AnnoEntity.class).table();
 
-        try (PreparedStatement statement = getConnection().prepareStatement(String.format("""
-                SELECT *
-                FROM %s
-                LIMIT 1;""", tableName))) {
+        try (PreparedStatement statement = getConnection().prepareStatement(String.format("SELECT * FROM %s LIMIT 1;", tableName))) {
             statement.executeQuery();
             return true;
         } catch (SQLException e) {
@@ -197,40 +194,37 @@ public class Database {
             }
 
             switch (type) {
-                case CREATE -> scheme.add(String.format("`%s` %s NOT NULL", key, adapter.type()));
-                case UPDATE -> scheme.add(String.format("`%s` = ?", key));
-                case SELECT, INSERT -> scheme.add(key);
-                case DELETE -> {}
-                default -> throw new IllegalArgumentException("No such type of command type");
+                case CREATE: scheme.add(String.format("`%s` %s NOT NULL", key, adapter.type()));
+                    break;
+                case UPDATE: scheme.add(String.format("`%s` = ?", key));
+                    break;
+                case SELECT:
+                case INSERT:
+                    scheme.add(key);
+                    break;
+                case DELETE: {}
+                default: throw new IllegalArgumentException("No such type of command type");
             }
 
         }
         final String column = String.join(", ", scheme);
         switch (type) {
-            case CREATE -> {
-                return String.format("""
-                            CREATE TABLE IF NOT EXISTS `%s` (%s);
-                            """, tableName, column);
+            case CREATE: {
+                return String.format("CREATE TABLE IF NOT EXISTS `%s` (%s);", tableName, column);
             }
-            case SELECT -> {
-                return String.format("""
-                            SELECT %s FROM `%s` WHERE #where = %s;
-                            """, column, tableName, generate(scheme.size()));
+            case SELECT: {
+                return String.format("SELECT %s FROM `%s` WHERE #where = #value;", column, tableName);
             }
-            case INSERT -> {
-                return String.format("""
-                                INSERT INTO `%s` (%s) VALUES (%s)
-                                """, tableName, column, generate(scheme.size()));
+            case INSERT: {
+                return String.format("INSERT INTO `%s` (%s) VALUES (%s)", tableName, column, generate(scheme.size()));
             }
-            case UPDATE -> {
-                return String.format("""
-                                UPDATE `%s` SET %s WHERE `a` = a
-                                """, tableName, column);
+            case UPDATE: {
+                return String.format("UPDATE `%s` SET %s WHERE #where = #value;", tableName, column);
             }
-            case DELETE -> {
+            case DELETE: {
                 return String.format("DELETE FROM `%s`", tableName);
             }
-            default -> throw new IllegalArgumentException("No such type of CommandType");
+            default: throw new IllegalArgumentException("No such type of CommandType");
         }
     }
 
@@ -261,7 +255,7 @@ public class Database {
         // Validate that the object type constructor with zero arguments
         final Optional<Constructor<?>> constructors = Arrays.stream(objectClass.getDeclaredConstructors())
                 .filter(constructor -> constructor.getParameterCount() == 0).findFirst();
-        if (constructors.isEmpty()) {
+        if (!constructors.isPresent()) {
             throw new IllegalArgumentException("Class type must have a zero-argument constructor: " + objectClass.getName());
         }
 
